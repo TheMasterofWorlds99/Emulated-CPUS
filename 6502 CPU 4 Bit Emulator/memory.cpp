@@ -5,7 +5,7 @@ uint8_t Memory::Read_Byte(uint16_t address) {
   if (address >= MAX_MEMORY)
   {
     std::println("Invalid Address. Attempting to Access Data at {}", address);
-    return;
+    return 0;
   }
 
   return (*mem)[address];

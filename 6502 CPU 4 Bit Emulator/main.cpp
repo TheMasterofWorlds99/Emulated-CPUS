@@ -5,8 +5,6 @@ int main()
 {
 	Memory memory;
 
-	memory.Reset();
-
 	memory.Write_Byte(0xA61, 0b1101011);
 	memory.Write_Byte(0xA60, 0xAA);
 
