@@ -1,7 +1,7 @@
 #include "memory.hpp"
 #include <print>
 
-uint8_t Memory::Read_Byte(u16 address) {
+uint8_t Memory::Read_Byte(u16 address) const {
   if (address >= MAX_MEMORY)
   {
     std::println("Invalid Address. Attempting to Access Data at {}", address);
@@ -11,8 +11,8 @@ uint8_t Memory::Read_Byte(u16 address) {
   return (*mem)[address];
 }
 
-void Memory::Write_Byte(u16 address, u8 value) {
-  if (address < 0x00 || address >= MAX_MEMORY)
+void Memory::Write_Byte(u16 address, u8 value) const {
+  if (address >= MAX_MEMORY)
   {
     std::println("Invalid Address. Attempting to Access Data at {}", address);
     return;
@@ -21,6 +21,6 @@ void Memory::Write_Byte(u16 address, u8 value) {
   (*mem)[address] = value;
 }
 
-void Memory::Reset() {
+void Memory::Reset() const {
   mem->fill(0x00);
 }

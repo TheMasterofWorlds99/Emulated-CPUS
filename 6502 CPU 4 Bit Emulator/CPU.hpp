@@ -5,9 +5,9 @@
 #include "memory.hpp"
 
 enum class Opcode : u8 {
-  LDA,
-  STA,
-  ADD
+  LDA = 0xA9,
+  STA = 0x8D,
+  ADC = 0x69
 };
 
 class CPU {
@@ -25,6 +25,7 @@ public:
 
   void executeOpcode(Opcode opcode);
   void step();
+
 private:
   Memory mem;
 };

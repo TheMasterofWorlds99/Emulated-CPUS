@@ -10,7 +10,7 @@ void CPU::executeOpcode(Opcode opcode) {
       //LDA helper function
     case Opcode::STA:
       //STA helper function
-    case Opcode::ADD:
+    case Opcode::ADC:
       //ADD helper function
     default:
       break;
