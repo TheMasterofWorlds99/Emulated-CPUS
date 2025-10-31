@@ -1,18 +1,23 @@
-#include <cstdint>
+#include "CPU.hpp"
 
-class CPU {
-public:
-  uint8_t Accumulator;
-  uint8_t X_Reg;
-  uint8_t Y_Reg;
-  uint8_t SP;
-  uint16_t PC;
+Opcode CPU::fetchOpcode() {
+  return static_cast<Opcode>(mem.Read_Byte(PC));
+}
 
-  CPU(uint8_t Accumulator, uint8_t X_Reg, uint8_t Y_Reg, uint8_t SP, uint16_t PC) :
-    Accumulator(Accumulator), X_Reg(X_Reg), Y_Reg(Y_Reg), SP(SP), PC(PC)
-  {
+void CPU::executeOpcode(Opcode opcode) {
+  switch (opcode) {
+    case Opcode::LDA:
+      //LDA helper function
+    case Opcode::STA:
+      //STA helper function
+    case Opcode::ADD:
+      //ADD helper function
+    default:
+      break;
   }
+}
 
-
-private:
-};
+void CPU::step() {
+  Opcode op = fetchOpcode();
+  executeOpcode(op);
+}
