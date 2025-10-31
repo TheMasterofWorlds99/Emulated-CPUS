@@ -3,4 +3,5 @@ add_executable (CMakeTarget "main.cpp"  "CPU.cpp" "memory.cpp")
 
 if (CMAKE_VERSION VERSION_GREATER 3.12)
   set_property(TARGET CMakeTarget PROPERTY CXX_STANDARD 23)
+  set(CMAKE_CXX_STANDARD_REQUIRED True)
 endif()
