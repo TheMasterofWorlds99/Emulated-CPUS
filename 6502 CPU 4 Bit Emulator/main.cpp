@@ -1,20 +1,19 @@
 ﻿#include "CPU.hpp"
-#include "memory.hpp"
+#include "Bus.hpp"
 
 #include <print>
 
 //Test of the Memory System
 int main()
 {
-	Memory memory;
+	Bus bus;
 
-	memory.Write_Byte(0xA61, static_cast<u8>(Opcode::ADC));
-	memory.Write_Byte(0xA62, 194 - 19 * 0.5 / 1);
+	u16 Address = 0x50AA;
 
-	u8 x = memory.Read_Byte(0xA61);
-	u8 y = memory.Read_Byte(0xA62);
-	u8 z = memory.Read_Byte(0xA23);
+	bus.Write_Byte(Address, 0xAA);
 
-	std::println("{}, {}, {}", x, y, z);
+	u8 x = bus.Read_Byte(Address);
+
+	std::println("Byte Value at Address 0x{:X} is 0x{:X}", Address, x);
 	return 0;
 }

@@ -2,13 +2,7 @@
 #define CPUS_CPU_HPP
 
 #include <cstdint>
-#include "memory.hpp"
-
-enum class Opcode : u8 {
-  LDA = 0xA9,
-  STA = 0x8D,
-  ADC = 0x69
-};
+#include "Bus.hpp"
 
 class CPU {
 public:
@@ -21,13 +15,10 @@ public:
   {
   }
 
-  Opcode fetchOpcode();
+  int fetchOpcode();
 
-  void executeOpcode(Opcode opcode);
+  void executeOpcode(int opcode);
   void step();
-
-private:
-  Memory mem;
 };
 
 #endif //CPUS_CPU_HPP

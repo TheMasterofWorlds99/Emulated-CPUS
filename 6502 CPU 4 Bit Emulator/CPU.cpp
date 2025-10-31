@@ -1,23 +1,26 @@
 #include "CPU.hpp"
 
-Opcode CPU::fetchOpcode() {
-  return static_cast<Opcode>(mem.Read_Byte(PC));
+int CPU::fetchOpcode() {
+  //TODO
+  return 0;
 }
 
-void CPU::executeOpcode(Opcode opcode) {
+void CPU::executeOpcode(int opcode) {
+  //MASSIVE SWITCH STATEMENT
   switch (opcode) {
-    case Opcode::LDA:
-      //LDA helper function
-    case Opcode::STA:
-      //STA helper function
-    case Opcode::ADC:
-      //ADD helper function
+    //LDA
+    case 0x00:
+      break;
+      //TODO
+    case 0x01:
+      break;
     default:
       break;
+      //TODO
   }
 }
 
 void CPU::step() {
-  Opcode op = fetchOpcode();
+  int op = fetchOpcode();
   executeOpcode(op);
 }
