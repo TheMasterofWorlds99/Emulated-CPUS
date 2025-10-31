@@ -2,7 +2,10 @@
 #define CPUS_CPU_HPP
 
 #include <cstdint>
+#include <functional>
+
 #include "Bus.hpp"
+#include "types.hpp"
 
 class CPU {
 public:
@@ -15,10 +18,13 @@ public:
   {
   }
 
-  int fetchOpcode();
+  u8 Read_Byte(Bus& bus, u16 address);
+  void Write_Byte(Bus& bus, u16 address, u8 value);
 
-  void executeOpcode(int opcode);
-  void step();
+  int fetchOpcode(Bus& bus);
+
+  void executeOpcode(int opcode, Bus& bus);
+  void step(Bus& bus);
 };
 
 #endif //CPUS_CPU_HPP

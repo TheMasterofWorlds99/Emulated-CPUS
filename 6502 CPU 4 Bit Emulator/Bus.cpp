@@ -2,8 +2,8 @@
 #include <print>
 #include <format>
 
-u8 Bus::Read_Byte(u16 address) const {
-  if (address > MAX_MEMORY) {
+u8 Bus::Read_Byte(u16 address) {
+  if (address >= MAX_MEMORY) {
     std::println("Invalid Address! Attempting to Read Address: {:X}", address);
     return 0;
   }
@@ -11,11 +11,11 @@ u8 Bus::Read_Byte(u16 address) const {
   if (address < MAX_WRAM) {
     return WRAM.at(address);
   }
-  else if (address > MAX_WRAM && address < MAX_WRAM + MAX_VRAM) {
+  else if (address < MAX_WRAM + MAX_VRAM) {
     address -= MAX_WRAM;
     return VRAM.at(address);
   }
-  else if (address > MAX_WRAM + MAX_VRAM && address < MAX_WRAM + MAX_VRAM + MAX_ROM) {
+  else if (address < MAX_WRAM + MAX_VRAM + MAX_ROM) {
     address -= (MAX_WRAM + MAX_VRAM);
     return ROM.at(address);
   }
@@ -26,7 +26,7 @@ u8 Bus::Read_Byte(u16 address) const {
 }
 
 void Bus::Write_Byte(u16 address, u8 value) {
-  if (address > MAX_MEMORY) {
+  if (address >= MAX_MEMORY) {
     std::println("Invalid Address! Attempting to Access Write Address: {:X}", address);
     return;
   }
@@ -34,11 +34,11 @@ void Bus::Write_Byte(u16 address, u8 value) {
   if (address < MAX_WRAM) {
     WRAM.at(address) = value;
   }
-  else if (address > MAX_WRAM && address < MAX_WRAM + MAX_VRAM) {
+  else if (address < MAX_WRAM + MAX_VRAM) {
     address -= MAX_WRAM;
     VRAM.at(address) = value;
   }
-  else if (address > MAX_WRAM + MAX_VRAM && address < MAX_WRAM + MAX_VRAM + MAX_ROM) {
+  else if (address < MAX_WRAM + MAX_VRAM + MAX_ROM) {
     address -= (MAX_WRAM + MAX_VRAM);
     std::println("Attempting to Write Read Only Memory, Attempting to Write the ROM Address: {:X}", address);
   }

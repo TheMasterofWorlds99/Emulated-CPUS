@@ -21,7 +21,7 @@ public:
     VRAM.fill(0x00);
   }
 
-  [[nodiscard]] u8 Read_Byte(u16 address) const;
+  [[nodiscard]] u8 Read_Byte(u16 address);
   void Write_Byte(u16 address, u8 value);
 
   void Reset_WRAM();
