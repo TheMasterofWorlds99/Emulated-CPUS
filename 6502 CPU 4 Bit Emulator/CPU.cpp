@@ -10,18 +10,27 @@ void CPU::executeOpcode(int opcode) {
   u8 value;
   //MASSIVE SWITCH STATEMENT
   switch (opcode) {
-    //LDA (Load)
+    //LDA
     case 0x00: //Immediate
       value = Read_Byte(bus, PC++);
       Accumulator = value;
-      std::println("LDA Immediate: Loaded 0x{:X} into the Accumulator", value);
+      Set_ZN_Flags(Accumulator);
+      std::println("LDA Immediate: Loaded 0x{:02X} into the Accumulator", value);
       break;
-    //ADC
+    //STA
     case 0x01:
       value = Read_Byte(bus, PC++);
-      Accumulator += value;
-      std::println("ADC Immediate: Added 0x{:X} to the Accumulator", value);
+      Write_Byte(bus, value, Accumulator);
+      std::println("STA Zero Page: Stored Accumulator (0x{:02X}) at address 0x{:02X}", Accumulator, value);
       break;
+    //ADC
+    case 0x02:
+      value = Read_Byte(bus, PC++);
+      Accumulator += value;
+      Set_ZN_Flags(Accumulator);
+      std::println("ADC Immediate: Added 0x{:02X} to the Accumulator", value);
+      break;
+
     default:
       break;
   }
@@ -32,11 +41,11 @@ void CPU::step() {
   executeOpcode(op);
 }
 
-void CPU::cpu_init(void *bus_ctx, u8 (*read_func)(void *, u16), void (*write_func)(void *, u16, u8)) {
+CPU::CPU(void* bus_ctx, u8(*read_func)(void*, u16), void (*write_func)(void*, u16, u8)) {
   this->Accumulator = this->X_Reg = this->Y_Reg = 0;
-  this->SP = 0x00;
+  this->SP = 0xFD; // Stack usually starts high
   this->PC = 0x0000;
-  this->SR = { 0, 0, 0, 0, 0, 0 }; // Initialize status register
+  this->SR = { 0 }; // Initialize status register
 
   this->bus = bus_ctx;
   this->Read_Byte = read_func;

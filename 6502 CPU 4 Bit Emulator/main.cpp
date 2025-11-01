@@ -1,26 +1,23 @@
-﻿#include "CPU.hpp"
-#include "Bus.hpp"
+﻿#include "emulator.hpp"
 
 #include <print>
 
 //Test of the Memory System
 int main()
 {
-	CPU cpu = { 0, 0, 0, 0, 0x0000 };
-	Bus bus;
+	Emulator emulator;
 
-	cpu.cpu_init(&bus, Bus::Read_Wrapper, Bus::Write_Wrapper);
+	//LDA 0xA9
+	//ADC 0x42
+	//STA 0x7F
+	std::string program = "00 A9 02 42 01 7F";
 
-	cpu.Write_Byte(&bus, 0x00, 0x00); //LDA
-	cpu.Write_Byte(&bus, 0x01, 0x22); //34
-	cpu.Write_Byte(&bus, 0x02, 0x01); //ADC
-	cpu.Write_Byte(&bus, 0x03, 0x4D); //77
+	emulator.LoadProgram(program);
 
-	for (int i = 0; i < 2; i++) {
-		cpu.step();
-	}
+	emulator.Run();
 
-	std::println("Accumulator: 0x{:02X}", cpu.Accumulator);
+	emulator.PrintAccumulator();
+	emulator.PrintMemoryValue(0x7F);
 
 	return 0;
 }
