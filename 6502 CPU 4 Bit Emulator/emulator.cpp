@@ -19,7 +19,7 @@ void Emulator::Run() {
   while (true) {
     cpu.step();
 
-    if (cpu.PC >= 0x05) {
+    if (cpu.PC >= 0x06) {
       break;
     }
   }

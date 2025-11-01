@@ -11,24 +11,68 @@ void CPU::executeOpcode(int opcode) {
   //MASSIVE SWITCH STATEMENT
   switch (opcode) {
     //LDA
-    case 0x00: //Immediate
-      value = Read_Byte(bus, PC++);
-      Accumulator = value;
+    case 0xA9: //Immediate
+      Accumulator = Fetch_Immediate();
       Set_ZN_Flags(Accumulator);
-      std::println("LDA Immediate: Loaded 0x{:02X} into the Accumulator", value);
       break;
+
+    case 0xA5: //Zero Page
+      Accumulator = Read_Byte(bus, Addr_ZeroPage());
+      Set_ZN_Flags(Accumulator);
+      break;
+
+    case 0xAD: //Absolute
+      Accumulator = Read_Byte(bus, Addr_Absolute());
+      Set_ZN_Flags(Accumulator);
+      break;
+
     //STA
-    case 0x01:
-      value = Read_Byte(bus, PC++);
-      Write_Byte(bus, value, Accumulator);
-      std::println("STA Zero Page: Stored Accumulator (0x{:02X}) at address 0x{:02X}", Accumulator, value);
+    case 0x85: //Zero Page
+      Write_Byte(bus, Addr_ZeroPage(), Accumulator);
       break;
+
+    case 0x8D: //Absolute
+      Write_Byte(bus, Addr_Absolute(), Accumulator);
+      break;
+
     //ADC
-    case 0x02:
-      value = Read_Byte(bus, PC++);
-      Accumulator += value;
+    case 0x69: //Immediate
+    {
+      value = Fetch_Immediate();
+      u16 sum = Accumulator + value + SR.C;
+
+      SR.C = (sum > 0xFF);
+      SR.V = (~(Accumulator ^ value) & (Accumulator ^ sum) & 0x80) != 0;
+
+      Accumulator = static_cast<u8>(sum);
       Set_ZN_Flags(Accumulator);
-      std::println("ADC Immediate: Added 0x{:02X} to the Accumulator", value);
+    }
+      break;
+
+    case 0x65: //Zero Page
+    {
+      value = Read_Byte(bus, Addr_ZeroPage());
+      u16 sum = Accumulator + value + SR.C;
+
+      SR.C = (sum > 0xFF);
+      SR.V = (~(Accumulator ^ value) & (Accumulator ^ sum) & 0x80) != 0;
+
+      Accumulator = static_cast<u8>(sum);
+      Set_ZN_Flags(Accumulator);
+    }
+      break;
+
+    case 0x6D: //Absolute
+    {
+      value = Read_Byte(bus, Addr_Absolute());
+      u16 sum = Accumulator + value + SR.C;
+
+      SR.C = (sum > 0xFF);
+      SR.V = (~(Accumulator ^ value) & (Accumulator ^ sum) & 0x80) != 0;
+
+      Accumulator = static_cast<u8>(sum);
+      Set_ZN_Flags(Accumulator);
+    }
       break;
 
     default:
