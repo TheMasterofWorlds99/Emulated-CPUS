@@ -2,22 +2,11 @@
 
 #include <print>
 
-//Let's ignore the really bad Read and Write functions
-u8 CPU::Read_Byte(Bus& bus, u16 address) {
-  u8(Bus:: * FuncPtr)(u16) = &Bus::Read_Byte;
-  return (bus.*FuncPtr)(address);
-}
-
-void CPU::Write_Byte(Bus& bus, u16 address, u8 value) {
-  void(Bus:: * FuncPtr)(u16, u8) = &Bus::Write_Byte;
-  (bus.*FuncPtr)(address, value);
-}
-
-int CPU::fetchOpcode(Bus& bus) {
+int CPU::fetchOpcode() {
   return Read_Byte(bus, PC++);
 }
 
-void CPU::executeOpcode(int opcode, Bus& bus) {
+void CPU::executeOpcode(int opcode) {
   u8 value;
   //MASSIVE SWITCH STATEMENT
   switch (opcode) {
@@ -38,7 +27,18 @@ void CPU::executeOpcode(int opcode, Bus& bus) {
   }
 }
 
-void CPU::step(Bus& bus) {
-  int op = fetchOpcode(bus);
-  executeOpcode(op, bus);
+void CPU::step() {
+  int op = fetchOpcode();
+  executeOpcode(op);
+}
+
+void CPU::cpu_init(void *bus_ctx, u8 (*read_func)(void *, u16), void (*write_func)(void *, u16, u8)) {
+  this->Accumulator = this->X_Reg = this->Y_Reg = 0;
+  this->SP = 0x00;
+  this->PC = 0x0000;
+  this->SR = { 0, 0, 0, 0, 0, 0 }; // Initialize status register
+
+  this->bus = bus_ctx;
+  this->Read_Byte = read_func;
+  this->Write_Byte = write_func;
 }

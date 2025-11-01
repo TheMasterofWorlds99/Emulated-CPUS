@@ -27,6 +27,14 @@ public:
   void Reset_WRAM();
   void Reset_VRAM();
 
+  static uint8_t Read_Wrapper(void* ctx, uint16_t addr) {
+    return static_cast<Bus*>(ctx)->Read_Byte(addr);
+  }
+
+  static void Write_Wrapper(void* ctx, uint16_t addr, uint8_t val) {
+    static_cast<Bus*>(ctx)->Write_Byte(addr, val);
+  }
+
 private:
   std::array<u8, MAX_WRAM> WRAM;
   std::array<u8, MAX_VRAM> VRAM;

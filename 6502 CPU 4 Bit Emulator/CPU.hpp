@@ -2,10 +2,7 @@
 #define CPUS_CPU_HPP
 
 #include <cstdint>
-#include <functional>
-
 #include "Bus.hpp"
-#include "types.hpp"
 
 class CPU {
 public:
@@ -13,18 +10,31 @@ public:
   u8 SP;
   u16 PC;
 
+  struct Status {
+    bool C : 1;
+    bool Z : 1;
+    bool I : 1;
+    bool D : 1;
+    bool V : 1;
+    bool N : 1;
+  } SR{};
+
   CPU(u8 Accumulator, u8 X_Reg, u8 Y_Reg, u8 SP, u16 PC) :
     Accumulator(Accumulator), X_Reg(X_Reg), Y_Reg(Y_Reg), SP(SP), PC(PC)
   {
   }
 
-  u8 Read_Byte(Bus& bus, u16 address);
-  void Write_Byte(Bus& bus, u16 address, u8 value);
+  void* bus{};
 
-  int fetchOpcode(Bus& bus);
+  u8 (*Read_Byte)(void* ctx, u16 addr){};
+  void (*Write_Byte)(void* ctx, u16 addr, u8 val){};
 
-  void executeOpcode(int opcode, Bus& bus);
-  void step(Bus& bus);
+  int fetchOpcode();
+
+  void executeOpcode(int opcode);
+  void step();
+
+  void cpu_init(void* bus_ctx, u8 (*read_func)(void*, u16), void (*write_func)(void*, u16, u8));
 };
 
 #endif //CPUS_CPU_HPP
