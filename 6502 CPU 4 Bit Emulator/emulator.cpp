@@ -37,3 +37,13 @@ void Emulator::PrintMemoryValue(u16 address) {
   u8 value = bus.Read_Byte(address);
   std::println("Value at memory address 0x{:02X} is 0x{:02X}", address, value);
 }
+
+void Emulator::PrintStatus() {
+  std::println("Status Break: {}", static_cast<int>(cpu.SR.B));
+  std::println("Status Zero: {}", static_cast<int>(cpu.SR.Z));
+  std::println("Status Interrupt Disable: {}", static_cast<int>(cpu.SR.I));
+  std::println("Status Decimal: {}", static_cast<int>(cpu.SR.D));
+  std::println("Status Overflow: {}", static_cast<int>(cpu.SR.V));
+  std::println("Status Carry: {}", static_cast<int>(cpu.SR.C));
+  std::println("Status Negative: {}", static_cast<int>(cpu.SR.N));
+}

@@ -75,6 +75,46 @@ void CPU::executeOpcode(u8 opcode) {
     }
       break;
 
+    //SBC
+    case 0xE9: //Immediate
+    {
+      value = Fetch_Immediate();
+      u16 difference = Accumulator - value - (1 - SR.C);
+
+      SR.C = (difference > 0xFF);
+      SR.V = (~(Accumulator ^ value) & (Accumulator ^ difference) & 0x80) != 0;
+
+      Accumulator = static_cast<u8>(difference);
+      Set_ZN_Flags(Accumulator);
+    }
+      break;
+
+    case 0xE5: //Zero Page
+    {
+      value = Read_Byte(bus, Addr_ZeroPage());
+      u16 difference = Accumulator - value - (1 - SR.C);
+
+      SR.C = (difference > 0xFF);
+      SR.V = (~(Accumulator ^ value) & (Accumulator ^ difference) & 0x80) != 0;
+
+      Accumulator = static_cast<u8>(difference);
+      Set_ZN_Flags(Accumulator);
+    }
+      break;
+
+    case 0xED: //Absolute
+    {
+      value = Read_Byte(bus, Addr_Absolute());
+      u16 difference = Accumulator - value - (1 - SR.C);
+
+      SR.C = (difference > 0xFF);
+      SR.V = (~(Accumulator ^ value) & (Accumulator ^ difference) & 0x80) != 0;
+
+      Accumulator = static_cast<u8>(difference);
+      Set_ZN_Flags(Accumulator);
+    }
+      break;
+
     //Break
     case 0x00:
       SR.B = true;

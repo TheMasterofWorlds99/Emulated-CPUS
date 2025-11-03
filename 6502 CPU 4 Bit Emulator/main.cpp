@@ -6,10 +6,10 @@ int main()
 	Emulator emulator;
 
 	//LDA (Immediate) -> 0xF9
-	//ADC (Absolute) -> 0x02 and 0x00 to make 0x0002
+	//SBC (Immediate) -> 0xF2
 	//STA (Zero Page) -> 0x7F
 	//BRK == 0x00
-	std::string program = "A9 49 6D 02 00 85 7F";
+	std::string program = "A9 49 E9 F2 85 7F";
 
 	emulator.LoadProgram(program);
 
@@ -17,6 +17,7 @@ int main()
 
 	emulator.PrintAccumulator();
 	emulator.PrintMemoryValue(0x7F);
+	emulator.PrintStatus();
 
 	return 0;
 }

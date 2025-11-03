@@ -20,6 +20,7 @@ public:
 
   void PrintAccumulator();
   void PrintMemoryValue(u16 address);
+  void PrintStatus();
 
 private:
   Bus bus;
