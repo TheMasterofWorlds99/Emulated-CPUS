@@ -2,11 +2,11 @@
 
 #include <print>
 
-int CPU::fetchOpcode() {
+u8 CPU::fetchOpcode() {
   return Read_Byte(bus, PC++);
 }
 
-void CPU::executeOpcode(int opcode) {
+void CPU::executeOpcode(u8 opcode) {
   u8 value;
   //MASSIVE SWITCH STATEMENT
   switch (opcode) {
@@ -75,13 +75,20 @@ void CPU::executeOpcode(int opcode) {
     }
       break;
 
+    //Break
+    case 0x00:
+      SR.B = true;
+      break;
+
     default:
+      std::println("ERR: Unknown Opcode: 0x{:02X} at PC 0x{:02X}", opcode, PC - 1);
+      SR.B = true;
       break;
   }
 }
 
 void CPU::step() {
-  int op = fetchOpcode();
+  u8 op = fetchOpcode();
   executeOpcode(op);
 }
 
@@ -89,7 +96,7 @@ CPU::CPU(void* bus_ctx, u8(*read_func)(void*, u16), void (*write_func)(void*, u1
   this->Accumulator = this->X_Reg = this->Y_Reg = 0;
   this->SP = 0xFD; // Stack usually starts high
   this->PC = 0x0000;
-  this->SR = { 0 }; // Initialize status register
+  this->SR = { false }; // Initialize status register
 
   this->bus = bus_ctx;
   this->Read_Byte = read_func;

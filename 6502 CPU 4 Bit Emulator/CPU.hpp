@@ -17,6 +17,7 @@ public:
     u1 D : 1;
     u1 V : 1;
     u1 N : 1;
+    u1 B : 1;
   } SR{};
 
   CPU(void* bus_ctx, u8(*read_func)(void*, u16), void (*write_func)(void*, u16, u8));
@@ -26,9 +27,9 @@ public:
   u8 (*Read_Byte)(void* ctx, u16 addr){};
   void (*Write_Byte)(void* ctx, u16 addr, u8 val){};
 
-  int fetchOpcode();
+  u8 fetchOpcode();
 
-  void executeOpcode(int opcode);
+  void executeOpcode(u8 opcode);
   void step();
 
 private:

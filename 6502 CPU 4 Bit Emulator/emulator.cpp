@@ -19,13 +19,17 @@ void Emulator::Run() {
   while (true) {
     cpu.step();
 
-    if (cpu.PC >= 0x06) {
+    if (cpu.SR.B == true) {
       break;
     }
   }
 }
 
 void Emulator::PrintAccumulator() {
+  if (cpu.SR.B == true) {
+    return;
+  }
+
   std::println("Current Value in the Accumulator: 0x{:02X}", cpu.Accumulator);
 }
 
